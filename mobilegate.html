@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MobileGate — Wholesale iPhones</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap"></noscript>
+
+<style>
+/* ── Reset & Tokens ─────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg:       #0A0A0F;
+  --surface:  #111118;
+  --surface2: #18181f;
+  --border:   rgba(255,255,255,0.07);
+  --blue:     #2979FF;
+  --blue-dim: rgba(41,121,255,0.12);
+  --blue-glow:rgba(41,121,255,0.25);
+  --white:    #F0F4FF;
+  --muted:    #6B7280;
+  --green:    #22C55E;
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-body:    'Inter', system-ui, sans-serif;
+}
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--white);
+  min-height: 100vh;
+  overflow-x: hidden;
+  /* prevent flash before preloader hides */
+}
+
+/* ── Preloader ───────────────────────────────────────────────── */
+#preloader {
+  position: fixed; inset: 0; z-index: 9999;
+  background: var(--bg);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 24px;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+#preloader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+
+.pre-logo {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 7vw, 48px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--white);
+}
+.pre-logo span { color: var(--blue); }
+
+.pre-bar-track {
+  width: 180px; height: 2px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.pre-bar-fill {
+  height: 100%;
+  background: var(--blue);
+  border-radius: 2px;
+  width: 0%;
+  animation: preload 2.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+@keyframes preload {
+  0%   { width: 0%; }
+  40%  { width: 55%; }
+  70%  { width: 78%; }
+  100% { width: 100%; }
+}
+.pre-label {
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-family: var(--font-body);
+}
+
+/* ── Ticker / Marquee ────────────────────────────────────────── */
+.ticker {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.ticker-inner {
+  display: inline-flex;
+  gap: 0;
+  animation: ticker-scroll 22s linear infinite;
+}
+/* Two copies for seamless loop */
+.ticker-inner span {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 0 28px;
+}
+.ticker-inner span b {
+  color: var(--blue);
+  font-weight: 700;
+}
+.ticker-inner .dot {
+  color: var(--border);
+  padding: 0;
+  margin: 0 4px;
+}
+@keyframes ticker-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ── Nav ─────────────────────────────────────────────────────── */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 20px;
+  background: rgba(10, 10, 15, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+.nav-logo span { color: var(--blue); }
+
+.nav-badge {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 11px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--green);
+}
+.nav-badge::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 8px var(--green);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+/* ── Hero ────────────────────────────────────────────────────── */
+.hero {
+  padding: clamp(48px, 10vw, 96px) 20px clamp(40px, 8vw, 72px);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+/* Subtle radial glow behind hero text */
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 50%; transform: translateX(-50%);
+  width: 600px; height: 400px;
+  background: radial-gradient(ellipse at center top, rgba(41,121,255,0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-eyebrow {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--blue);
+  margin-bottom: 20px;
+}
+/* The signature element: ghost + solid split headline */
+.hero-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  margin-bottom: 24px;
+}
+.hero-title .ghost {
+  display: block;
+  font-size: clamp(52px, 14vw, 96px);
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(255,255,255,0.18);
+}
+.hero-title .solid {
+  display: block;
+  font-size: clamp(48px, 13vw, 88px);
+  color: var(--blue);
+}
+.hero-sub {
+  font-size: clamp(14px, 3.5vw, 16px);
+  color: var(--muted);
+  line-height: 1.7;
+  max-width: 340px;
+  margin: 0 auto 36px;
+}
+.hero-stats {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+.stat { text-align: center; }
+.stat-num {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--white);
+  display: block;
+}
+.stat-label {
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* ── Section headings ────────────────────────────────────────── */
+.section-label {
+  padding: 0 20px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.section-label h2 {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.section-label .pill {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  background: var(--blue-dim);
+  color: var(--blue);
+  border: 1px solid rgba(41,121,255,0.25);
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+/* ── Product Grid ────────────────────────────────────────────── */
+.grid-section { padding: 32px 16px 0; }
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.2s;
+  position: relative;
+}
+.card:hover {
+  border-color: rgba(41,121,255,0.3);
+  transform: translateY(-2px);
+}
+.card:active { transform: translateY(0); }
+
+/* Glow behind the model visual — the aesthetic risk */
+.card-visual {
+  position: relative;
+  height: clamp(110px, 28vw, 160px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--surface2);
+}
+.card-visual::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, var(--blue-glow) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.35s;
+}
+.card:hover .card-visual::before { opacity: 1; }
+
+.card-glyph {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 8vw, 48px);
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  color: rgba(255,255,255,0.07);
+  user-select: none;
+  text-align: center;
+  line-height: 1;
+  /* The product name shown as large watermark text */
+}
+.card-glyph .model-name-big {
+  display: block;
+  color: rgba(255,255,255,0.05);
+  font-size: clamp(16px, 4.5vw, 28px);
+  margin-top: 4px;
+}
+
+/* iPhone silhouette as CSS */
+.phone-shape {
+  width: clamp(36px, 9vw, 54px);
+  height: clamp(66px, 16vw, 96px);
+  border: 2.5px solid rgba(255,255,255,0.15);
+  border-radius: 12px;
+  position: relative;
+  flex-shrink: 0;
+}
+.phone-shape::before {
+  content: '';
+  position: absolute;
+  top: 8px; left: 50%; transform: translateX(-50%);
+  width: 28%; height: 3px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 2px;
+}
+.phone-shape::after {
+  content: '';
+  position: absolute;
+  bottom: 6px; left: 50%; transform: translateX(-50%);
+  width: 40%; height: 40%;
+  border: 1.5px solid rgba(255,255,255,0.1);
+  border-radius: 50%;
+}
+/* Blue screen glow on phone */
+.phone-screen {
+  position: absolute;
+  top: 16px; left: 5px; right: 5px; bottom: 14px;
+  background: linear-gradient(135deg, rgba(41,121,255,0.2), rgba(41,121,255,0.05));
+  border-radius: 6px;
+}
+
+.card-body { padding: 14px 14px 16px; flex: 1; display: flex; flex-direction: column; gap: 10px; }
+
+.card-model {
+  font-family: var(--font-display);
+  font-size: clamp(13px, 3.5vw, 16px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+.card-spec {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.card-spec span {
+  display: inline-block;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 2px 7px;
+  margin: 2px 2px 2px 0;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+}
+.card-price {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+.card-price .label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+.card-price .amount {
+  font-family: var(--font-display);
+  font-size: clamp(16px, 4vw, 20px);
+  font-weight: 700;
+  color: var(--white);
+}
+.card-price .per { font-size: 10px; color: var(--muted); margin-left: 2px; }
+
+.avail-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  color: var(--green);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.avail-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--green);
+  flex-shrink: 0;
+}
+.avail-row.limited { color: #F59E0B; }
+.avail-row.limited .avail-dot { background: #F59E0B; }
+
+.btn-order {
+  display: block;
+  width: 100%;
+  padding: 11px 16px;
+  background: var(--blue);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: center;
+  transition: background 0.15s, transform 0.1s;
+  margin-top: auto;
+}
+.btn-order:hover { background: #1565e0; }
+.btn-order:active { transform: scale(0.97); }
+
+/* Shake on tap */
+.shaking { animation: shake 0.5s ease infinite; }
+@keyframes shake {
+  0%, 100% { transform: rotate(0deg) translateY(-2px); }
+  25%       { transform: rotate(-4deg) translateY(-2px); }
+  75%       { transform: rotate(4deg) translateY(-2px); }
+}
+
+/* ── Why Us section ──────────────────────────────────────────── */
+.why-section {
+  padding: 40px 16px 0;
+}
+.why-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.why-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px 16px;
+}
+.why-icon { font-size: 22px; margin-bottom: 10px; }
+.why-title {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 5px;
+  letter-spacing: -0.01em;
+}
+.why-desc {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* ── How to Order ────────────────────────────────────────────── */
+.how-section {
+  padding: 40px 20px 0;
+}
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: relative;
+}
+.steps::before {
+  content: '';
+  position: absolute;
+  left: 15px; top: 20px; bottom: 20px;
+  width: 1px;
+  background: linear-gradient(180deg, var(--blue), transparent);
+}
+.step {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 16px 0;
+  position: relative;
+}
+.step-num {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  background: var(--blue-dim);
+  border: 1px solid rgba(41,121,255,0.3);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--blue);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+.step-text { padding-top: 4px; }
+.step-title {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.step-desc { font-size: 12px; color: var(--muted); line-height: 1.6; }
+
+/* ── Sticky WhatsApp bar (mobile) ────────────────────────────── */
+.wa-bar {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  z-index: 200;
+  padding: 12px 16px max(12px, env(safe-area-inset-bottom));
+  background: rgba(10, 10, 15, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 10px;
+}
+.wa-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 13px 16px;
+  border-radius: 12px;
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.wa-btn-primary {
+  background: #25D366;
+  color: #000;
+}
+.wa-btn-primary:hover { background: #1ebe5a; }
+.wa-btn-primary:active { transform: scale(0.97); }
+
+.wa-btn-secondary {
+  background: var(--surface2);
+  color: var(--white);
+  border: 1px solid var(--border);
+  flex: 0 0 auto;
+  padding: 13px 14px;
+}
+
+/* WhatsApp icon */
+.wa-icon { width: 20px; height: 20px; flex-shrink: 0; }
+
+/* ── Order Modal ─────────────────────────────────────────────── */
+.modal-bg {
+  position: fixed; inset: 0; z-index: 300;
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0;
+}
+.modal-bg.open { display: flex; }
+
+.modal-sheet {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-bottom: none;
+  border-radius: 20px 20px 0 0;
+  width: 100%;
+  max-width: 480px;
+  padding: 0 0 max(20px, env(safe-area-inset-bottom));
+  animation: sheet-up 0.35s cubic-bezier(0.32, 0, 0.17, 1);
+}
+@keyframes sheet-up {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+
+.modal-handle {
+  width: 36px; height: 4px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 2px;
+  margin: 14px auto 20px;
+}
+
+.modal-head {
+  padding: 0 20px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+}
+.modal-title {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.modal-product {
+  font-size: 12px;
+  color: var(--blue);
+  font-weight: 600;
+  margin-top: 2px;
+}
+.modal-close {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--white);
+  font-size: 16px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  line-height: 1;
+  transition: background 0.15s;
+}
+.modal-close:hover { background: rgba(255,255,255,0.1); }
+
+.modal-form { padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+.form-input {
+  width: 100%;
+  padding: 12px 14px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 14px;
+  transition: border-color 0.15s;
+  -webkit-appearance: none;
+}
+.form-input:focus {
+  outline: none;
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(41,121,255,0.12);
+}
+.form-input::placeholder { color: rgba(255,255,255,0.2); }
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+.btn-submit {
+  width: 100%;
+  padding: 15px;
+  background: #25D366;
+  color: #000;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 6px;
+  transition: all 0.15s;
+}
+.btn-submit:hover { background: #1ebe5a; }
+.btn-submit:active { transform: scale(0.97); }
+
+/* ── Footer ──────────────────────────────────────────────────── */
+footer {
+  margin-top: 48px;
+  padding: 28px 20px max(80px, calc(env(safe-area-inset-bottom) + 80px));
+  border-top: 1px solid var(--border);
+  text-align: center;
+}
+.footer-logo {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  margin-bottom: 8px;
+}
+.footer-logo span { color: var(--blue); }
+.footer-sub { font-size: 12px; color: var(--muted); margin-bottom: 16px; }
+.footer-links { display: flex; justify-content: center; gap: 20px; }
+.footer-links a {
+  font-size: 12px;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.footer-links a:hover { color: var(--white); }
+
+/* ── Reveal animation ────────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.55s ease, transform 0.55s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ── Reduced motion ──────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, .ticker-inner, .shaking, .pre-bar-fill, .modal-sheet { animation: none !important; transition: none !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── Preloader ─────────────────────────────────────────────── -->
+<div id="preloader" role="status" aria-label="Loading MobileGate">
+  <div class="pre-logo">Mobile<span>Gate</span></div>
+  <div class="pre-bar-track">
+    <div class="pre-bar-fill"></div>
+  </div>
+  <div class="pre-label">Loading stock…</div>
+</div>
+
+<!-- ── Ticker ────────────────────────────────────────────────── -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-inner">
+    <span><b>iPhone 16 Pro Max</b> · In Stock</span>
+    <span class="dot">·</span>
+    <span><b>iPhone 15 Pro</b> · In Stock</span>
+    <span class="dot">·</span>
+    <span><b>iPhone 14</b> · In Stock</span>
+    <span class="dot">·</span>
+    <span><b>iPhone 13 Pro Max</b> · Limited Units</span>
+    <span class="dot">·</span>
+    <span>Minimum Order: <b>5 units</b></span>
+    <span class="dot">·</span>
+    <span>Nationwide Delivery · <b>WhatsApp Orders</b></span>
+    <span class="dot">·</span>
+    <!-- Duplicate for seamless loop -->
+    <span><b>iPhone 16 Pro Max</b> · In Stock</span>
+    <span class="dot">·</span>
+    <span><b>iPhone 15 Pro</b> · In Stock</span>
+    <span class="dot">·</span>
+    <span><b>iPhone 14</b> · In Stock</span>
+    <span class="dot">·</span>
+    <span><b>iPhone 13 Pro Max</b> · Limited Units</span>
+    <span class="dot">·</span>
+    <span>Minimum Order: <b>5 units</b></span>
+    <span class="dot">·</span>
+    <span>Nationwide Delivery · <b>WhatsApp Orders</b></span>
+    <span class="dot">·</span>
+  </div>
+</div>
+
+<!-- ── Nav ───────────────────────────────────────────────────── -->
+<nav>
+  <div class="nav-logo">Mobile<span>Gate</span></div>
+  <div class="nav-badge">Stock Live</div>
+</nav>
+
+<!-- ── Hero ──────────────────────────────────────────────────── -->
+<section class="hero">
+  <p class="hero-eyebrow">Verified Wholesale Supplier</p>
+  <h1 class="hero-title">
+    <span class="ghost">Wholesale</span>
+    <span class="solid">iPhones.</span>
+  </h1>
+  <p class="hero-sub">Bulk stock for resellers, traders &amp; shop owners. Real prices. Fast delivery.</p>
+  <div class="hero-stats">
+    <div class="stat">
+      <span class="stat-num">500+</span>
+      <span class="stat-label">Units Sold</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">5+</span>
+      <span class="stat-label">Min. Order</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">24h</span>
+      <span class="stat-label">Dispatch</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── Product Grid ───────────────────────────────────────────── -->
+<section class="grid-section">
+  <div class="section-label reveal">
+    <h2>Available Stock</h2>
+    <span class="pill">Updated Daily</span>
+  </div>
+
+  <div class="grid">
+
+    <!-- iPhone 16 Pro Max -->
+    <div class="card reveal" onclick="shakeCard(this)">
+      <div class="card-visual">
+        <div class="phone-shape"><div class="phone-screen"></div></div>
+      </div>
+      <div class="card-body">
+        <div class="card-model">iPhone 16 Pro Max</div>
+        <div class="card-spec">
+          <span>256GB</span><span>512GB</span><span>1TB</span>
+        </div>
+        <div class="avail-row"><span class="avail-dot"></span>In Stock</div>
+        <div class="card-price">
+          <span class="label">From</span>
+          <span class="amount">POA</span>
+          <span class="per">/ unit</span>
+        </div>
+        <button class="btn-order" onclick="openModal(event,'iPhone 16 Pro Max')">Order Now →</button>
+      </div>
+    </div>
+
+    <!-- iPhone 15 Pro -->
+    <div class="card reveal" onclick="shakeCard(this)" style="transition-delay:0.07s">
+      <div class="card-visual">
+        <div class="phone-shape"><div class="phone-screen"></div></div>
+      </div>
+      <div class="card-body">
+        <div class="card-model">iPhone 15 Pro</div>
+        <div class="card-spec">
+          <span>128GB</span><span>256GB</span><span>512GB</span>
+        </div>
+        <div class="avail-row"><span class="avail-dot"></span>In Stock</div>
+        <div class="card-price">
+          <span class="label">From</span>
+          <span class="amount">POA</span>
+          <span class="per">/ unit</span>
+        </div>
+        <button class="btn-order" onclick="openModal(event,'iPhone 15 Pro')">Order Now →</button>
+      </div>
+    </div>
+
+    <!-- iPhone 14 -->
+    <div class="card reveal" onclick="shakeCard(this)" style="transition-delay:0.12s">
+      <div class="card-visual">
+        <div class="phone-shape"><div class="phone-screen"></div></div>
+      </div>
+      <div class="card-body">
+        <div class="card-model">iPhone 14</div>
+        <div class="card-spec">
+          <span>128GB</span><span>256GB</span>
+        </div>
+        <div class="avail-row"><span class="avail-dot"></span>In Stock</div>
+        <div class="card-price">
+          <span class="label">From</span>
+          <span class="amount">POA</span>
+          <span class="per">/ unit</span>
+        </div>
+        <button class="btn-order" onclick="openModal(event,'iPhone 14')">Order Now →</button>
+      </div>
+    </div>
+
+    <!-- iPhone 13 Pro Max -->
+    <div class="card reveal" onclick="shakeCard(this)" style="transition-delay:0.18s">
+      <div class="card-visual">
+        <div class="phone-shape"><div class="phone-screen"></div></div>
+      </div>
+      <div class="card-body">
+        <div class="card-model">iPhone 13 Pro Max</div>
+        <div class="card-spec">
+          <span>256GB</span><span>512GB</span>
+        </div>
+        <div class="avail-row limited"><span class="avail-dot"></span>Limited Units</div>
+        <div class="card-price">
+          <span class="label">From</span>
+          <span class="amount">POA</span>
+          <span class="per">/ unit</span>
+        </div>
+        <button class="btn-order" onclick="openModal(event,'iPhone 13 Pro Max')">Order Now →</button>
+      </div>
+    </div>
+
+    <!-- iPhone 12 -->
+    <div class="card reveal" onclick="shakeCard(this)" style="transition-delay:0.22s">
+      <div class="card-visual">
+        <div class="phone-shape"><div class="phone-screen"></div></div>
+      </div>
+      <div class="card-body">
+        <div class="card-model">iPhone 12</div>
+        <div class="card-spec">
+          <span>64GB</span><span>128GB</span>
+        </div>
+        <div class="avail-row"><span class="avail-dot"></span>In Stock</div>
+        <div class="card-price">
+          <span class="label">From</span>
+          <span class="amount">POA</span>
+          <span class="per">/ unit</span>
+        </div>
+        <button class="btn-order" onclick="openModal(event,'iPhone 12')">Order Now →</button>
+      </div>
+    </div>
+
+    <!-- iPhone SE -->
+    <div class="card reveal" onclick="shakeCard(this)" style="transition-delay:0.26s">
+      <div class="card-visual">
+        <div class="phone-shape"><div class="phone-screen"></div></div>
+      </div>
+      <div class="card-body">
+        <div class="card-model">iPhone SE (3rd Gen)</div>
+        <div class="card-spec">
+          <span>64GB</span><span>128GB</span>
+        </div>
+        <div class="avail-row"><span class="avail-dot"></span>In Stock</div>
+        <div class="card-price">
+          <span class="label">From</span>
+          <span class="amount">POA</span>
+          <span class="per">/ unit</span>
+        </div>
+        <button class="btn-order" onclick="openModal(event,'iPhone SE 3rd Gen')">Order Now →</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── Why MobileGate ─────────────────────────────────────────── -->
+<section class="why-section">
+  <div class="section-label reveal">
+    <h2>Why MobileGate</h2>
+  </div>
+  <div class="why-grid">
+    <div class="why-card reveal">
+      <div class="why-icon">🔒</div>
+      <div class="why-title">Verified Stock</div>
+      <div class="why-desc">All units inspected before dispatch. Grading on request.</div>
+    </div>
+    <div class="why-card reveal" style="transition-delay:0.07s">
+      <div class="why-icon">🚚</div>
+      <div class="why-title">Fast Delivery</div>
+      <div class="why-desc">Nationwide courier. Orders dispatched within 24 hours.</div>
+    </div>
+    <div class="why-card reveal" style="transition-delay:0.12s">
+      <div class="why-icon">💰</div>
+      <div class="why-title">Wholesale Pricing</div>
+      <div class="why-desc">Volume discounts available. Better margins for you.</div>
+    </div>
+    <div class="why-card reveal" style="transition-delay:0.18s">
+      <div class="why-icon">📱</div>
+      <div class="why-title">WhatsApp Direct</div>
+      <div class="why-desc">Order straight from chat. No forms, no waiting.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── How to Order ───────────────────────────────────────────── -->
+<section class="how-section">
+  <div class="section-label reveal">
+    <h2>How to Order</h2>
+  </div>
+  <div class="steps reveal">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-text">
+        <div class="step-title">Choose your model</div>
+        <div class="step-desc">Tap any product above and hit Order Now.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-text">
+        <div class="step-title">Fill in your details</div>
+        <div class="step-desc">Your name, business name, location and quantity.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-text">
+        <div class="step-title">Sent to WhatsApp</div>
+        <div class="step-desc">Your order goes straight to us. We confirm stock and pricing within minutes.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer ─────────────────────────────────────────────────── -->
+<footer>
+  <div class="footer-logo">Mobile<span>Gate</span></div>
+  <div class="footer-sub">Wholesale iPhones · Nationwide Delivery</div>
+  <div class="footer-links">
+    <a href="javascript:void(0)" onclick="openWhatsApp()">WhatsApp Us</a>
+    <a href="mailto:info@mobilegate.co.za">Email</a>
+  </div>
+</footer>
+
+<!-- ── Sticky WhatsApp bar ────────────────────────────────────── -->
+<div class="wa-bar">
+  <button class="wa-btn wa-btn-primary" onclick="openWhatsApp()">
+    <svg class="wa-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+    </svg>
+    Chat &amp; Order on WhatsApp
+  </button>
+  <button class="wa-btn wa-btn-secondary" onclick="scrollToGrid()" aria-label="View stock">
+    📦
+  </button>
+</div>
+
+<!-- ── Order Modal (bottom sheet) ────────────────────────────── -->
+<div class="modal-bg" id="orderModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-head">
+      <div>
+        <div class="modal-title" id="modalTitle">Place Order</div>
+        <div class="modal-product" id="modalProduct">—</div>
+      </div>
+      <button class="modal-close" onclick="closeModal()" aria-label="Close">✕</button>
+    </div>
+    <form class="modal-form" onsubmit="submitOrder(event)">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="field-name">Your Name</label>
+          <input class="form-input" id="field-name" type="text" placeholder="Full name" required autocomplete="name">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="field-biz">Business Name</label>
+          <input class="form-input" id="field-biz" type="text" placeholder="Shop / Company" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="field-loc">Location / City</label>
+        <input class="form-input" id="field-loc" type="text" placeholder="e.g. Johannesburg" required autocomplete="address-level2">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="field-qty">Quantity</label>
+          <input class="form-input" id="field-qty" type="number" min="5" placeholder="Min. 5 units" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="field-storage">Storage</label>
+          <select class="form-input" id="field-storage" required>
+            <option value="" disabled selected>Select</option>
+            <option>64GB</option>
+            <option>128GB</option>
+            <option>256GB</option>
+            <option>512GB</option>
+            <option>1TB</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn-submit" type="submit">
+        <svg class="wa-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+        </svg>
+        Send Order via WhatsApp
+      </button>
+    </form>
+  </div>
+</div>
+
+<script>
+  // ── CHANGE THIS TO YOUR REAL NUMBER ─────────────────────────
+  const WA_NUMBER = '27XXXXXXXXX'; // e.g. '27821234567' (no + sign, no spaces)
+
+  // ── Preloader ─────────────────────────────────────────────────
+  window.addEventListener('load', () => {
+    // Wait for the progress bar animation to finish (~2.4s) then fade out
+    setTimeout(() => {
+      const pre = document.getElementById('preloader');
+      pre.classList.add('hidden');
+      // Remove from DOM after fade
+      setTimeout(() => pre.remove(), 700);
+      // Trigger reveal animations after preloader hides
+      initReveal();
+    }, 2600);
+  });
+
+  // ── Scroll Reveal ─────────────────────────────────────────────
+  function initReveal() {
+    const els = document.querySelectorAll('.reveal');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+      });
+    }, { threshold: 0.08 });
+    els.forEach(el => obs.observe(el));
+  }
+
+  // ── Shake on card tap ─────────────────────────────────────────
+  function shakeCard(card) {
+    const phone = card.querySelector('.phone-shape');
+    if (!phone) return;
+    phone.classList.add('shaking');
+    setTimeout(() => phone.classList.remove('shaking'), 600);
+  }
+
+  // ── Modal ─────────────────────────────────────────────────────
+  let activeProduct = '';
+
+  function openModal(e, model) {
+    e.stopPropagation(); // don't trigger card shake
+    activeProduct = model;
+    document.getElementById('modalProduct').textContent = model;
+    document.getElementById('orderModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    document.getElementById('orderModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // Close on backdrop tap
+  document.getElementById('orderModal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+
+  // ── Submit → WhatsApp ─────────────────────────────────────────
+  function submitOrder(e) {
+    e.preventDefault();
+    const name    = document.getElementById('field-name').value.trim();
+    const biz     = document.getElementById('field-biz').value.trim();
+    const loc     = document.getElementById('field-loc').value.trim();
+    const qty     = document.getElementById('field-qty').value.trim();
+    const storage = document.getElementById('field-storage').value;
+
+    const msg = encodeURIComponent(
+      `🛒 *New MobileGate Order*\n\n` +
+      `📱 *Product:* ${activeProduct} (${storage})\n` +
+      `👤 *Name:* ${name}\n` +
+      `🏪 *Business:* ${biz}\n` +
+      `📍 *Location:* ${loc}\n` +
+      `📦 *Quantity:* ${qty} units\n\n` +
+      `Please confirm stock availability and pricing. Thank you!`
+    );
+
+    window.open(`https://wa.me/${WA_NUMBER}?text=${msg}`, '_blank');
+    closeModal();
+    // Reset form
+    e.target.reset();
+  }
+
+  // ── General WhatsApp enquiry ──────────────────────────────────
+  function openWhatsApp() {
+    const msg = encodeURIComponent(
+      `Hi MobileGate 👋\n\nI'd like to enquire about bulk iPhone stock and pricing. Please send me your current wholesale price list.`
+    );
+    window.open(`https://wa.me/${WA_NUMBER}?text=${msg}`, '_blank');
+  }
+
+  // ── Scroll to grid ────────────────────────────────────────────
+  function scrollToGrid() {
+    document.querySelector('.grid-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+</script>
+
+</body>
+</html>
